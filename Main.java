@@ -127,5 +127,23 @@ public class Main {
 
 // public static String[] solveRegex(String line, String regex)
 // if line doesn't match regex, return null.
+// String regex = "for ({0} over {1}) *"
 // Check if line matches regex:
-// while (index < length)
+// int regexIndex = 0, index = 0;
+// while (index < length) {
+//    char current = line.charAt(index)
+//    char match = regex.charAt(regexIndex)
+//    if (match == '*') {
+//       while (current != nextMatch) {
+//          index++
+//          reEval current
+//          if (index > length) {
+//            matched = false;
+//            break;
+//          }
+//       }
+//    }
+//    else if (match != regex) {
+//
+//    }
+// }
