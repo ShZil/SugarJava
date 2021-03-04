@@ -1,0 +1,3 @@
+for (int i over array) {
+array@i = 0;
+}
