@@ -28,3 +28,17 @@ value = .someMethod();
 ==
 value = value.someMethod();
 ```
+
+Easy, readable, constructors. A lot of times you find yourself having the same names for fields and constructor parameters, and I actually thought this way was doable when I first learnt Java. However, the line must appear first in the constructor.
+```java
+public Class(params...) {
+    this.* = *;
+}
+==
+public Class(params...) {
+    this.param1 = param1;
+    this.param2 = param2;
+    this.param3 = param3;
+    ...
+}
+```

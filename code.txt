@@ -1,3 +1,17 @@
-for (int i over array) {
-array@i = 0;
+class Tester {
+
+int level;
+char stars;
+
+public Tester(int level, char stars) {
+    this.* = *;
+}
+
+public static void main(String[] args) {
+    int[] array = new int[10];
+        for (int i over array) {
+            array@i = 0;
+            print i;
+        }
+    }
 }
