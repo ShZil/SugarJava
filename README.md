@@ -42,3 +42,7 @@ public Class(params...) {
     ...
 }
 ```
+
+FString, or Formatted Strings, although found in many other languages, is not present in Java. Well, now it is!
+```java
+$"The value is {0}!"

@@ -104,6 +104,7 @@ public class Main {
         final char all = '#';
         final char parameter = '0';
         final char any = '_';
+        final char end = ';';
 
         int index = 0;
         int regexIndex = 0;
@@ -113,8 +114,8 @@ public class Main {
         Arrays.fill(parameters, "");
         int length = line.length();
 
-        if (regex == null || line == null) return null;
-        if (regex.charAt(regex.length()-1) != ';') System.out.println("WARNING: Make sure you have a closing character. \"" + regex + "\"");
+        if (regex == null || line == null || regex == "" || line.trim() == "") return null;
+        if (regex.charAt(regex.length()-1) != end) System.out.println("WARNING: Make sure you have a closing character. \"" + regex + "\"");
 
         while (index < length) {
             char current = line.charAt(index);
@@ -130,7 +131,7 @@ public class Main {
                 if (regexIndex + 1 < regex.length()) {
                     nextMatch = regex.charAt(regexIndex + 1);
                 } else {
-                    nextMatch = ';';
+                    nextMatch = end;
                 }
                 while (current != nextMatch) {
                     index++;
@@ -143,6 +144,7 @@ public class Main {
                         System.out.println("Uhh... I ran out of characters to check...");
                         System.out.println("index, regexIndex: " + index + ", " + regexIndex);
                         if (regexIndex != regex.length() - 1) matched = false;
+                        System.out.println("are we at last regex char? " + (regexIndex != regex.length() - 1));
                         break;
                     }
                     current = line.charAt(index);
@@ -162,6 +164,7 @@ public class Main {
             regexIndex++;
         }
         System.out.println(matched + "\n" + (matched ? Arrays.deepToString(parameters) : ""));
+        if (matched) System.out.println(regex + " should fit " + line);
         if (matched) return parameters;
         return null;
     }
