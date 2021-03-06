@@ -5,7 +5,8 @@ import java.util.Scanner;  // Import the Scanner class to read text files
 import java.util.Arrays;  // import the Arrays class
 import java.io.File;     // Import the File class
 
-// THIS IS BROKEN. SOME REGEXS RETURN `true` ALTOUGHT THEY ARE NOT CORRECT, AND IT MESSES STUFF UP!
+// THIS IS BROKEN. SOME REGEXS RETURN `true` ALTHOUGH THEY ARE NOT CORRECT, AND IT MESSES STUFF UP!
+// Also, you gotta create int[] prespace to save the indents, and use them when writing to the file.
 // BTW, you can opne the folder as an InteliJ Project for easy debugging.
 
 public class Main {
@@ -20,14 +21,15 @@ public class Main {
         };
         for (int i = 0; i < code.length; i++) {
             System.out.println("line " + i);
-            if (code[i].trim() == "") continue;
-            for (int j = 0; j < syntax.length; j++) {
-                String[] names = solveRegex(code[i], syntax[j][0]);
+            if (code[i].trim().equals("")) continue;
+            for (String[] strings : syntax) {
+                String[] names = solveRegex(code[i], strings[0]);
                 if (names == null) continue;
                 System.out.println(Arrays.deepToString(names));
-                code[i] = substitute(syntax[j][1], names);
+                code[i] = substitute(strings[1], names);
             }
         }
+        sugarConstructor(code);
         System.out.println(Arrays.deepToString(code));
         writeToFile("compiled.txt", code);
     }
@@ -35,8 +37,8 @@ public class Main {
     public static void sugarConstructor(String[] code) {
         // Special Case: Sugar Constructor.
         for (int i = 0; i < code.length; i++) {
-            String[] foundMatchingStatment = solveRegex(code[i], "this.* = *;");
-            if (foundMatchingStatment == null) continue;
+            String[] foundMatchingStatement = solveRegex(code[i], "this.* = *;");
+            if (foundMatchingStatement == null) continue;
             String[] constructor = solveRegex(code[i-1], "#(0) {");
             if (constructor == null) {
                 System.out.println("WARNING: Didn't compile line " + i + " because no constructor was found above.");
@@ -47,7 +49,7 @@ public class Main {
             code[i] = "";
             for (int j = 0; j < argus.length; j++) {
                 argus[j] = argus[j].trim();
-                String[] arg = solveRegex(argus[j], "0 0");
+                String[] arg = solveRegex(argus[j].trim() + ',', "0 0,");
                 if (arg == null) {
                     System.out.println("WARNING: Invalid parameter syntax at line " + i);
                     continue;
@@ -128,11 +130,14 @@ public class Main {
 
             if (match == all || match == parameter) {
                 boolean isParameter = match != all;
-                char nextMatch;
-                if (regexIndex + 1 < regex.length()) {
-                    nextMatch = regex.charAt(regexIndex + 1);
-                } else {
-                    nextMatch = end;
+                char nextMatch = ';';
+                if (regexIndex + 1 <= regex.length()) {
+                    try {
+                        nextMatch = regex.charAt(regexIndex + 1);
+                    } catch (Exception e) {
+                        System.out.println("Exception!");
+                    }
+
                 }
                 while (current != nextMatch) {
                     index++;

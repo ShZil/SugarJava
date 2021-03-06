@@ -1,12 +1,13 @@
 class Tester {
-for (int  = 0;  < .length; ++)
+
 int level;
 char stars;
-for (int  = 0;  < .length; ++)
+
 public Tester(int level, char stars) {
-this.* = *;
+this.level = level;
+this.stars = stars;
 }
-for (int  = 0;  < .length; ++)
+
 public static void main(String[] args) {
 int[] array = new int[10];
 for (int i over array) {
