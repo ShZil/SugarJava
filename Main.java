@@ -6,6 +6,7 @@ import java.util.Arrays;  // import the Arrays class
 import java.io.File;     // Import the File class
 
 // THIS IS BROKEN. SOME REGEXS RETURN `true` ALTOUGHT THEY ARE NOT CORRECT, AND IT MESSES STUFF UP!
+// BTW, you can opne the folder as an InteliJ Project for easy debugging.
 
 public class Main {
     public static void main(String[] args) {
