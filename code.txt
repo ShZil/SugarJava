@@ -13,5 +13,6 @@ public static void main(String[] args) {
             array@i = 0;
             print i;
         }
+        print array;
     }
 }

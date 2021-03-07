@@ -4,15 +4,15 @@ int level;
 char stars;
 
 public Tester(int level, char stars) {
-this.level = level;
+    this.level = level;
 this.stars = stars;
 }
 
 public static void main(String[] args) {
-int[] array = new int[10];
-for (int i over array) {
-array[i] = 0;
-System.out.println(i);
-}
-}
+    int[] array = new int[10];
+        for (int i = 0; i < array.length; i++)
+            array[i] = 0;
+            System.out.println(i);
+        }
+    }
 }

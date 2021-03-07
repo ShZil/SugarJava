@@ -5,23 +5,26 @@ import java.util.Scanner;  // Import the Scanner class to read text files
 import java.util.Arrays;  // import the Arrays class
 import java.io.File;     // Import the File class
 
-// THIS IS BROKEN. SOME REGEXS RETURN `true` ALTHOUGH THEY ARE NOT CORRECT, AND IT MESSES STUFF UP!
-// Also, you gotta create int[] prespace to save the indents, and use them when writing to the file.
-// BTW, you can opne the folder as an InteliJ Project for easy debugging.
+// THIS IS BROKEN. SOME REGEXES RETURN `true` ALTHOUGH THEY ARE NOT CORRECT, AND IT MESSES STUFF UP!
+// Also, you gotta create `int[] indent` to save the indents, and use them when writing to the file.
+// BTW, you can open the folder as an IntelliJJ Project for easy debugging.
 
 public class Main {
     public static void main(String[] args) {
         String[] code = readFile("code.txt").split("\n");
         System.out.println(Arrays.deepToString(code));
         String[][] syntax = new String[][]{
-            new String[]{"for (int 0 over 0)", "for (int {0} = 0; {0} < {1}.length; {0}++)"},
+            new String[]{"for (int 0 over 0)__", "for (int {0} = 0; {0} < {1}.length; {0}++)"},
             new String[]{"0@0 0;", "{0}[{1}] {2};"}, // I think this one is the cause of problems since it has a parameter at the start.
             new String[]{"print 0;", "System.out.println({0});"},
             new String[]{"0 = .0(0);", "{0} = {0}.{1}({2});"}
         };
+        int[] indent = new int[code.length];
         for (int i = 0; i < code.length; i++) {
-            System.out.println("line " + i);
+            System.out.println("line " + i + ": " + code[i]);
             if (code[i].trim().equals("")) continue;
+            indent[i] = trimCount(code[i]);
+            code[i] = code[i].trim();
             for (String[] strings : syntax) {
                 String[] names = solveRegex(code[i], strings[0]);
                 if (names == null) continue;
@@ -31,7 +34,7 @@ public class Main {
         }
         sugarConstructor(code);
         System.out.println(Arrays.deepToString(code));
-        writeToFile("compiled.txt", code);
+        writeToFile("compiled.txt", code, indent);
     }
 
     public static void sugarConstructor(String[] code) {
@@ -64,23 +67,23 @@ public class Main {
     }
 
     public static String readFile(String path) {
-        String out = "";
+        StringBuilder out = new StringBuilder();
         try {
             File file = new File(path);
             Scanner scan = new Scanner(file);
             while (scan.hasNextLine()) {
-                out += scan.nextLine().trim();
-                out += "\n";
+                out.append(scan.nextLine());
+                out.append("\n");
             }
             scan.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred - File Not Found.");
             e.printStackTrace();
         }
-        return out;
+        return out.toString();
     }
 
-    public static void writeToFile(String path, String[] data) {
+    public static void writeToFile(String path, String[] data, int[] indent) {
         try {
             File file = new File(path);
             if (file.createNewFile()) {
@@ -93,8 +96,16 @@ public class Main {
             e.printStackTrace();
         }
         try {
+            StringBuilder toWrite = new StringBuilder();
+            for (int i = 0; i < indent.length; i++) {
+                for (int j = 0; j < indent[i]; j++) {
+                    toWrite.append(' ');
+                }
+                toWrite.append(data[i]);
+                toWrite.append('\n');
+            }
             FileWriter write = new FileWriter(path);
-            write.write(String.join("\n", data));
+            write.write(toWrite.toString());
             write.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
@@ -148,7 +159,6 @@ public class Main {
                     if (isParameter) parameters[parameterIndex] += current;
                     if (index >= length) {
                         System.out.println("Uhh... I ran out of characters to check...");
-                        System.out.println("index, regexIndex: " + index + ", " + regexIndex);
                         if (regexIndex != regex.length() - 1) matched = false;
                         System.out.println("are we at last regex char? " + (regexIndex != regex.length() - 1));
                         break;
@@ -162,7 +172,7 @@ public class Main {
                 regexIndex++;
                 continue;
             } else if (match != current) {
-                System.out.println(match + " should match " + current);
+                // System.out.println(match + " should match " + current);
                 matched = false;
                 break;
             }
@@ -180,5 +190,18 @@ public class Main {
             format = format.replaceAll("\\{" + i + "\\}", params[i]);
         }
         return format;
+    }
+
+    public static int trimCount(String s) {
+        boolean flag = true;
+        int index = 0;
+        while (flag) {
+            if (s.charAt(index) == ' ') {
+                index++;
+            } else {
+                flag = false;
+            }
+        }
+        return index;
     }
 }
