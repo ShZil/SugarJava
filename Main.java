@@ -12,27 +12,30 @@ import java.io.File;     // Import the File class
 public class Main {
     public static void main(String[] args) {
         String[] code = readFile("code.txt").split("\n");
-        System.out.println(Arrays.deepToString(code));
+        int[] indent = new int[code.length];
         String[][] syntax = new String[][]{
             new String[]{"for (int 0 over 0)__", "for (int {0} = 0; {0} < {1}.length; {0}++)"},
             new String[]{"0@0 0;", "{0}[{1}] {2};"}, // I think this one is the cause of problems since it has a parameter at the start.
             new String[]{"print 0;", "System.out.println({0});"},
             new String[]{"0 = .0(0);", "{0} = {0}.{1}({2});"}
         };
-        int[] indent = new int[code.length];
+
         for (int i = 0; i < code.length; i++) {
             System.out.println("line " + i + ": " + code[i]);
+            
             if (code[i].trim().equals("")) continue;
             indent[i] = trimCount(code[i]);
             code[i] = code[i].trim();
+
             for (String[] strings : syntax) {
                 String[] names = solveRegex(code[i], strings[0]);
                 if (names == null) continue;
-                System.out.println(Arrays.deepToString(names));
                 code[i] = substitute(strings[1], names);
             }
+
         }
         sugarConstructor(code);
+        fString(code);
         System.out.println(Arrays.deepToString(code));
         writeToFile("compiled.txt", code, indent);
     }
@@ -64,6 +67,10 @@ public class Main {
                 }
             }
         }
+    }
+
+    public static void fString(String[] code) {
+        // Special Case: FStrings.
     }
 
     public static String readFile(String path) {
