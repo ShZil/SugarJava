@@ -49,3 +49,24 @@ $"The value is {variable}!"
 ==
 "The value is " + (variable) + "!"
 ```
+
+Simpler Main function.
+```java
+main() {
+==
+public static void main(String[] args) {
+```
+
+JS Arrays! The java / c# arrays always seemed weird to me, because { and } should signify a block. Well now, you can use the better JS syntax to declare arrays!
+```java
+Type[] array = [item1, item2, item3...];
+==
+Type[] array = new Type[]{item1, item2, item2...};
+```
+
+Single line conditions. With colons. Looks really neat.
+```java
+if condition: action;
+==
+if (condition) action;
+```

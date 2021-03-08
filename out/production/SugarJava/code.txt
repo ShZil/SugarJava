@@ -1,17 +1,57 @@
 class Tester {
 
-int level;
-char stars;
+    int level;
+    char stars;
+    Object mine;
+    Vehicle yours;
 
-public Tester(int level, char stars) {
-    this.* = *;
-}
+    public Tester(int level, char stars, Car mine, Car yours) {
+        this.* = *;
+    }
 
-public static void main(String[] args) {
-    int[] array = new int[10];
+    public static void main(String[] args) {
+        int[] array = new int[10];
         for (int i over array) {
             array@i = 0;
             print i;
+        }
+        print array;
+
+        sort();
+    }
+
+    public static void sort() {
+        int[] array = [1, 50, 3, 4, 0];
+
+        // find min and max:
+        int max, min;
+        for num in array {
+            if (num > max) max = num;
+            if (num < min) min = num;
+        }
+
+
+        // create a map:
+        boolean[] map = new boolean[max - min];
+        for num in array {
+            map[num - min] = true;
+        }
+
+        // get the sorted array:
+        int index = 0;
+        int[] sorted = new int[array.length];
+        for (int i over map) {
+            if (map@i) {
+                sorted@index = i + min;
+                index++;
+            }
+        }
+
+        print "Expecting [0, 1, 3, 4, 50]";
+
+        for num in sorted {
+            print num;
+            print ",";
         }
     }
 }

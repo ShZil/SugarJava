@@ -14,15 +14,20 @@ public class Main {
         String[] code = readFile("code.txt").split("\n");
         int[] indent = new int[code.length];
         String[][] syntax = new String[][]{
-            new String[]{"for (int 0 over 0)__", "for (int {0} = 0; {0} < {1}.length; {0}++)"},
+            new String[]{"for (int 0 over 0)__", "for (int {0} = 0; {0} < {1}.length; {0}++) {"},
             new String[]{"0@0 0;", "{0}[{1}] {2};"}, // I think this one is the cause of problems since it has a parameter at the start.
             new String[]{"print 0;", "System.out.println({0});"},
-            new String[]{"0 = .0(0);", "{0} = {0}.{1}({2});"}
+            new String[]{"0 = .0(0);", "{0} = {0}.{1}({2});"},
+            new String[]{"for 0 in 0 {", "for (var {0} : {1}) {"},
+            new String[]{"if (0@0) {", "if ({0}[{1}]) {"},
+            new String[]{"0[] 0 = [0];", "{0}[] {1} = new {0}[]{{2}};"},
+            new String[]{"main() {", "public static void main(String[] args) {"},
+            new String[]{"if 0: 0;", "if ({0}) {1};"}
         };
 
         for (int i = 0; i < code.length; i++) {
             System.out.println("line " + i + ": " + code[i]);
-            
+
             if (code[i].trim().equals("")) continue;
             indent[i] = trimCount(code[i]);
             code[i] = code[i].trim();
@@ -34,13 +39,14 @@ public class Main {
             }
 
         }
-        sugarConstructor(code);
+        sugarConstructor(code, indent);
         fString(code);
         System.out.println(Arrays.deepToString(code));
+        writeToFile("Tester.java", code, indent);
         writeToFile("compiled.txt", code, indent);
     }
 
-    public static void sugarConstructor(String[] code) {
+    public static void sugarConstructor(String[] code, int[] indents) {
         // Special Case: Sugar Constructor.
         for (int i = 0; i < code.length; i++) {
             String[] foundMatchingStatement = solveRegex(code[i], "this.* = *;");
@@ -53,6 +59,7 @@ public class Main {
             System.out.println("Found constructor at " + (i-1));
             String[] argus = constructor[0].split(",");
             code[i] = "";
+            int indent = indents[i];
             for (int j = 0; j < argus.length; j++) {
                 argus[j] = argus[j].trim();
                 String[] arg = solveRegex(argus[j].trim() + ',', "0 0,");
@@ -64,9 +71,13 @@ public class Main {
                 System.out.println(substitute("this.{1} = {1};", arg));
                 if (j < argus.length - 1) {
                     code[i] += '\n';
+                    for (int k = 0; k < indent; k++) {
+                        code[i] += ' ';
+                    }
                 }
             }
         }
+        Arrays.sort(indents);
     }
 
     public static void fString(String[] code) {
