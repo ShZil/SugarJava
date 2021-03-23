@@ -7,6 +7,7 @@ import java.io.File;     // Import the File class
 
 // THIS IS BROKEN. SOME REGEXES RETURN `true` ALTHOUGH THEY ARE NOT CORRECT, AND IT MESSES STUFF UP!
 // Also, you gotta create `int[] indent` to save the indents, and use them when writing to the file.
+// yeah, past-ShZil, I added indents, but IT DOESN'T WORK!
 // BTW, you can open the folder as an IntelliJJ Project for easy debugging.
 
 public class Main {
@@ -14,7 +15,7 @@ public class Main {
         String[] code = readFile("code.txt").split("\n");
         int[] indent = new int[code.length];
         String[][] syntax = new String[][]{
-            new String[]{"for (int 0 over 0)__", "for (int {0} = 0; {0} < {1}.length; {0}++) {"},
+            new String[]{"for (int 0 over 0) {", "for (int {0} = 0; {0} < {1}.length; {0}++) {"},
             new String[]{"0@0 0;", "{0}[{1}] {2};"}, // I think this one is the cause of problems since it has a parameter at the start.
             new String[]{"print 0;", "System.out.println({0});"},
             new String[]{"0 = .0(0);", "{0} = {0}.{1}({2});"},
@@ -22,7 +23,8 @@ public class Main {
             new String[]{"if (0@0) {", "if ({0}[{1}]) {"},
             new String[]{"0[] 0 = [0];", "{0}[] {1} = new {0}[]{{2}};"},
             new String[]{"main() {", "public static void main(String[] args) {"},
-            new String[]{"if 0: 0;", "if ({0}) {1};"}
+            new String[]{"if 0: 0;", "if ({0}) {1};"},
+            new String[]{"class 0 : 0 {", "class {0} extends {1} {"}
         };
 
         for (int i = 0; i < code.length; i++) {
@@ -42,6 +44,7 @@ public class Main {
         sugarConstructor(code, indent);
         fString(code);
         System.out.println(Arrays.deepToString(code));
+        System.out.println(Arrays.toString(indent));
         writeToFile("Tester.java", code, indent);
         writeToFile("compiled.txt", code, indent);
     }
